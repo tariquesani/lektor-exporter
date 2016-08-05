@@ -107,7 +107,7 @@ class Lektor_Export {
     $output = array(
       'id'      => $post->ID,
       'title'   => get_the_title( $post ),
-      'date'    => get_the_date( 'Y-m-d', $post ),
+      'date'    => get_the_date( 'Y-m-d H:i:s', $post ),
       'author'  => get_userdata( $post->post_author )->display_name,
       'summary' => $post->post_excerpt,
       //'layout'  => get_post_type( $post ),
@@ -169,15 +169,15 @@ class Lektor_Export {
   function convert_content( $post ) {
 
     $content = apply_filters( 'the_content', $post->post_content );
-    $converter = new Markdownify\ConverterExtra(Markdownify\Converter::LINK_IN_PARAGRAPH);
-    $markdown = $converter->parseString( $content );
+    //$converter = new Markdownify\ConverterExtra(Markdownify\Converter::LINK_IN_PARAGRAPH);
+    //$markdown = $converter->parseString( $content );
 
     if ( false !== strpos( $markdown, '[]: ' ) ) {
       // faulty links; return plain HTML
       return $content;
     }
-
-    return $markdown;
+    return $content;
+    //return $markdown;
   }
 
   /**
@@ -215,6 +215,8 @@ class Lektor_Export {
         $output .= implode("\n", $meta['tags']);
         $output .= "\n---\n";
       }
+      $output .= "_slug: ".$meta['permalink']."\n";
+      $output .= "---\n";
       $output .= "body: \n";
       $output .= $this->convert_content( $post );
       $this->write( $output, $post );
