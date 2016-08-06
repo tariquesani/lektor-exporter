@@ -217,11 +217,47 @@ class Lektor_Export {
       }
       $output .= "_slug: ".$meta['permalink']."\n";
       $output .= "---\n";
+
+      $output .= $this->convert_featured_image($post);
+
       $output .= "body: \n";
       $output .= $this->convert_content( $post );
+
       $this->write( $output, $post );
+
+      $this->copy_featured_image($post);
     }
 
+  }
+
+  function convert_featured_image($post){
+    if ( has_post_thumbnail($post)) {
+      $full_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID),'full');
+
+      $full_image_url_array = explode('/',parse_url($full_image_url[0],PHP_URL_PATH));
+
+      $featured_image_filename = $full_image_url_array[count($full_image_url_array)-1];
+      $output = "featured_image: ".$featured_image_filename."\n";
+      $output .= "---\n";
+      $this->featured_image_filename = $featured_image_filename;
+      return $output;
+    }
+  }
+
+  function copy_featured_image($post){
+      global $wp_filesystem;
+
+      if ( has_post_thumbnail($post)) {
+          $full_image_url = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID),'full');
+
+          $full_basepath = get_home_path();
+
+          $featured_image_path = parse_url($full_image_url[0], PHP_URL_PATH);
+
+          $full_featured_image_path = $full_basepath . substr($featured_image_path, strpos($featured_image_path, basename($full_basepath)) + strlen(basename($full_basepath)));
+
+          copy($full_featured_image_path, $this->dir .'/blog/'.get_page_uri( $post->id ).'/'.$this->featured_image_filename);
+      }
   }
 
   function filesystem_method_filter() {
