@@ -109,7 +109,7 @@ class Lektor_Export {
       'title'   => get_the_title( $post ),
       'date'    => get_the_date( 'Y-m-d H:i:s', $post ),
       'author'  => get_userdata( $post->post_author )->display_name,
-      'summary' => $post->post_excerpt,
+      'excerpt' => get_the_excerpt( $post ),
       //'layout'  => get_post_type( $post ),
       //'guid'    => $post->guid
     );
@@ -205,6 +205,8 @@ class Lektor_Export {
       $output .= "---\n";
       $output .= "author: ".$meta['author']."\n";
       $output .= "---\n";
+      $output .= "excerpt: ".$meta['excerpt']."\n";
+      $output .= "---\n";      
       if (isset($meta['categories'])) {
         $output .= "categories: \n\n";
         $output .= implode("\n", $meta['categories']);
