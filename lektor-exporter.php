@@ -156,7 +156,7 @@ class Lektor_Export {
       if ( $tax == 'post_format' ) {
         $output['format'] = get_post_format( $post );
       } else {
-        $output[ $tax ] = wp_list_pluck( $terms, 'name' );
+        $output[ $tax ] = wp_list_pluck( $terms, 'slug' );
       }
     }
 
