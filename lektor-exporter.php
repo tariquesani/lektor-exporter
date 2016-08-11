@@ -262,6 +262,28 @@ class Lektor_Export {
       }
   }
 
+  function convert_categories(){
+    global $wp_filesystem;
+    $categories = get_categories();
+    foreach ($categories as $category) {
+      $wp_filesystem->mkdir( $this->dir .'/blog-categories/'.$category->slug );
+      $filename = '/blog-categories/'. $category->slug . '/contents.lr';
+      $output = "name: ".$category->name."\n---\n";
+      $wp_filesystem->put_contents( $this->dir . $filename, $output );
+    }
+  }
+
+  function convert_tags(){
+    global $wp_filesystem;
+    $tags = get_tags();
+    foreach ($tags as $tag) {
+      $wp_filesystem->mkdir( $this->dir .'/blog-tags/'.$tag->slug );
+      $filename = '/blog-tags/'. $tag->slug . '/contents.lr';
+      $output = "name: ".$tag->name."\n---\n";
+      $wp_filesystem->put_contents( $this->dir . $filename, $output );
+    }
+  }
+
   function filesystem_method_filter() {
     return 'direct';
   }
@@ -284,6 +306,8 @@ class Lektor_Export {
     $wp_filesystem->mkdir( $this->dir );
     $wp_filesystem->mkdir( $this->dir . 'wp-content/' );
     $wp_filesystem->mkdir( $this->dir . 'blog/' );
+    $wp_filesystem->mkdir( $this->dir . 'blog-categories/' );
+    $wp_filesystem->mkdir( $this->dir . 'blog-tags/' );
   }
 
   /**
@@ -293,6 +317,8 @@ class Lektor_Export {
     $this->init_temp_dir();
     //$this->convert_options();
     $this->convert_posts();
+    $this->convert_categories();
+    $this->convert_tags();
     $this->convert_uploads();
     //$this->zip();
     //$this->send();
