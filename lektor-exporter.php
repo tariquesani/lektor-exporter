@@ -172,10 +172,10 @@ class Lektor_Export {
     //$converter = new Markdownify\ConverterExtra(Markdownify\Converter::LINK_IN_PARAGRAPH);
     //$markdown = $converter->parseString( $content );
 
-    if ( false !== strpos( $markdown, '[]: ' ) ) {
+/*    if ( false !== strpos( $markdown, '[]: ' ) ) {
       // faulty links; return plain HTML
       return $content;
-    }
+    }*/
     return $content;
     //return $markdown;
   }
@@ -217,8 +217,10 @@ class Lektor_Export {
         $output .= implode("\n", $meta['tags']);
         $output .= "\n---\n";
       }
-      $output .= "_slug: ".$meta['permalink']."\n";
-      $output .= "---\n";
+      if (isset($meta['permalink'])) {
+        $output .= "_slug: ".$meta['permalink']."\n";
+        $output .= "---\n";
+      }
 
       $output .= $this->convert_featured_image($post);
 
@@ -386,7 +388,7 @@ class Lektor_Export {
       $filename = '/blog/'. get_page_uri( $post->id ) . '/contents.lr';
     } else {
       $filename = '_' . get_post_type( $post ) . 's/' . date( 'Y-m-d', strtotime( $post->post_date ) ) . '-' . $post->post_name . '.md';
-    }  
+    }
     $wp_filesystem->put_contents( $this->dir . $filename, $output );
 
   }
