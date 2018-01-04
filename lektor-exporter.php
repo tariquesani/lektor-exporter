@@ -106,7 +106,7 @@ class Lektor_Export {
 
     $output = array(
       'id'      => $post->ID,
-      'title'   => get_the_title( $post ),
+      'title'   => html_entity_decode( get_the_title( $post ) ),
       'date'    => get_the_date( 'Y-m-d', $post ),
       'author'  => get_userdata( $post->post_author )->display_name,
       'excerpt' => get_the_excerpt( $post ),
