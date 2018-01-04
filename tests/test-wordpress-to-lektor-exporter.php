@@ -87,7 +87,7 @@ class WordPressToLektorExporterTest extends WP_UnitTestCase {
     $expected = Array (
       'id'        => $post->ID,
       'title'     => 'Test Post',
-      'date'      => '2014-01-01 00:00:00',
+      'date'      => '2014-01-01',
       'author'    => 'Tester',
       'excerpt'   => 'This is a test post.',
       'permalink' => '/?p=12',
